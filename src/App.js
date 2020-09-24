@@ -16,7 +16,8 @@ class LogoutButton extends React.Component {
     fetch("/logout", {
       method: 'GET',
       username: 'bad_user',
-      password: 'badd_password'
+      password: 'badd_password',
+      headers: { "Authorization": "Basic xxx" }
   }).then(
       () => window.location.reload(),
       (error) => console.log(error)
