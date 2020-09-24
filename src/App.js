@@ -13,10 +13,10 @@ function App() {
 
 class LogoutButton extends React.Component {
   handleClick() {
-    fetch("/logout").then(
-      () => window.location.reload(),
+    fetch("/logout").then(null,
       (error) => console.log(error)
     );
+    window.location.reload();
   }
   render() {
     return (
