@@ -24,7 +24,10 @@ class GarageDoorController extends React.Component {
   }
   getUpdate() {
     fetch('/update')
-      .then(response=>response.json())
+      .then(response=>{
+        console.log(response);
+        return response.json();
+      })
       .then(data => {
         this.state.sensors = data;
         console.log(this.state.sensors);
@@ -34,10 +37,17 @@ class GarageDoorController extends React.Component {
     return (
       <div className="GarageDoorController">
         <h1>Garage Door Client</h1>
-        <ApiButton label="Open Door 1" action="odoor" />
-        <ApiButton label="Close Door 1" action="cdoor" />
-        <ApiButton label="Open Door 2" action="odoor2" />
-        <ApiButton label="Close Door 2" action="cdoor2" />
+
+        <div>Door 1: { this.state.sensors.Door1_isOpen ? "Opened" : "Closed"}</div>
+        <div>Door 2: { this.state.sensors.Door2_isOpen ? "Opened" : "Closed"}</div>
+
+        {this.state.sensors.Door1_isOpen
+          ? <ApiButton label="Close Door 1" action="cdoor" />
+          : <ApiButton label="Open Door 1" action="odoor" /> }
+
+        {this.state.sensors.Door1_isOpen
+          ? <ApiButton label="Close Door 2" action="cdoor2" />
+          : <ApiButton label="Open Door 2" action="odoor2" />}
       </div>
     );
   }
