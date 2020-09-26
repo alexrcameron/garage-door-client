@@ -33,19 +33,27 @@ class GarageDoorController extends React.Component {
         console.log(this.state.sensors);
       });
   }
+
+  door1_isOpen() {
+    return this.state.sensors.Door1_isOpen === true;
+  }
+  door2_isOpen() {
+    return this.state.sensors.Door2_isOpen === true;
+  }
+
   render() {
     return (
       <div className="GarageDoorController">
         <h1>Garage Door Client</h1>
 
-        <div>Door 1: { this.state.sensors.Door1_isOpen ? "Opened" : "Closed"}</div>
-        <div>Door 2: { this.state.sensors.Door2_isOpen ? "Opened" : "Closed"}</div>
+        <div>Door 1: { this.door1_isOpen() ? "Opened" : "Closed"}</div>
+        <div>Door 2: { this.door2_isOpen() ? "Opened" : "Closed"}</div>
 
-        {this.state.sensors.Door1_isOpen
+        {this.door1_isOpen()
           ? <ApiButton label="Close Door 1" action="cdoor" />
           : <ApiButton label="Open Door 1" action="odoor" /> }
 
-        {this.state.sensors.Door1_isOpen
+        {this.door1_isOpen()
           ? <ApiButton label="Close Door 2" action="cdoor2" />
           : <ApiButton label="Open Door 2" action="odoor2" />}
       </div>
