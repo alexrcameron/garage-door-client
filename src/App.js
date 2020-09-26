@@ -16,12 +16,12 @@ class GarageDoorController extends React.Component {
     super(props);
 
     this.state = {
-      Door1_isOpen: true,
-      Door2_isOpen: true
+      door1_isOpen: true,
+      door2_isOpen: true
     };
     
     // poll /update every 10 seconds
-    setInterval(()=> this.getUpdate(), 10000);
+    setInterval(()=> this.getUpdate(), 1000);
   }
   getUpdate() {
     fetch('/update')
@@ -49,17 +49,28 @@ class GarageDoorController extends React.Component {
     return (
       <div className="GarageDoorController">
         <h1>Garage Door Client</h1>
+        <DoorSection doorNumber={1} value={this.door1_isOpen()} />
+        <DoorSection doorNumber={2} value={this.door2_isOpen()} />
+      </div>
+    );
+  }
+}
 
-        <div>Door 1: { this.door1_isOpen() ? "Opened" : "Closed"}</div>
-        <div>Door 2: { this.door2_isOpen() ? "Opened" : "Closed"}</div>
+class DoorSection extends React.Component {
+  constructor(props) {
+    super(props);
+  }
 
-        {this.door1_isOpen()
-          ? <ApiButton label="Close Door 1" action="cdoor" />
-          : <ApiButton label="Open Door 1" action="odoor" /> }
+  door_isOpen() {
+    return this.props.value === true;
+  }
 
-        {this.door1_isOpen()
-          ? <ApiButton label="Close Door 2" action="cdoor2" />
-          : <ApiButton label="Open Door 2" action="odoor2" />}
+  render() {
+    return (
+      <div>
+        Door { this.props.doorNumber }: { this.door_isOpen() ? "Opened" : "Closed"}
+        { this.door_isOpen() ? <ApiButton label={`Close Door ${ this.props.doorNumber }`} action={`cdoor${ this.props.doorNumber }`} /> : null}
+        { !this.door_isOpen() ? <ApiButton label={`Open Door ${ this.props.doorNumber }`} action={`odoor${ this.props.doorNumber }`} /> : null}
       </div>
     );
   }
