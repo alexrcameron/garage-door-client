@@ -18,14 +18,15 @@ class GarageDoorController extends React.Component {
     this.state = {
       sensors: {}
     };
-    s
+    
     // poll /update every 10 seconds
     setInterval(()=> this.getUpdate(), 10000);
   }
   getUpdate() {
     fetch('/update')
-      .then(result => {
-        this.state.sensors = result;
+      .then(response=>response.json())
+      .then(data => {
+        this.state.sensors = data;
         console.log(this.state.sensors);
       });
   }
