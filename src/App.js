@@ -15,6 +15,10 @@ class GarageDoorController extends React.Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      sensors: {}
+    };
+    s
     // poll /update every 10 seconds
     setInterval(()=> this.getUpdate(), 10000);
   }
