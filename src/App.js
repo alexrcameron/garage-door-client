@@ -20,8 +20,8 @@ class GarageDoorController extends React.Component {
       door2_isOpen: true
     };
     
-    // poll /update every 10 seconds
-    setInterval(()=> this.getUpdate(), 1000);
+    // poll /update every 5 seconds
+    setInterval(()=> this.getUpdate(), 5000);
   }
   getUpdate() {
     fetch('/update')
