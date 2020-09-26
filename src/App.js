@@ -6,26 +6,24 @@ function App() {
   return (
     <div className="App">
       <h1>Garage Door Client</h1>
-      <LogoutButton />
+      <ApiButton label="Open Door 1" action="odoor" />
+      <ApiButton label="Close Door 1" action="cdoor" />
+      <ApiButton label="Open Door 2" action="odoor2" />
+      <ApiButton label="Close Door 2" action="cdoor2" />
     </div>
   );
 }
 
-class LogoutButton extends React.Component {
+class ApiButton extends React.Component {
   handleClick() {
-    fetch("/logout", {
-      method: 'GET',
-      username: 'bad_user',
-      password: 'badd_password',
-      headers: { "Authorization": "Basic xxx" }
-  }).then(
-      () => window.location.reload(),
+    fetch(`/${this.props.action}`).then(
+      () => console.log(""),
       (error) => console.log(error)
     );
   }
   render() {
     return (
-      <button onClick={() => this.handleClick()}>Logout</button>
+      <button onClick={() => this.handleClick()}>{this.props.label}</button>
     );
   }
 }
