@@ -16,7 +16,8 @@ class GarageDoorController extends React.Component {
     super(props);
 
     this.state = {
-      sensors: {}
+      Door1_isOpen: true,
+      Door2_isOpen: true
     };
     
     // poll /update every 10 seconds
@@ -25,20 +26,23 @@ class GarageDoorController extends React.Component {
   getUpdate() {
     fetch('/update')
       .then(response=>{
-        console.log(response);
+        console.debug(response);
         return response.json();
       })
       .then(data => {
-        this.state.sensors = data;
-        console.log(this.state.sensors);
+        console.debug(data);
+        this.setState({
+          door1_isOpen: data.door1_isOpen,
+          door2_isOpen: data.door2_isOpen
+        });
       });
   }
 
   door1_isOpen() {
-    return this.state.sensors.Door1_isOpen === true;
+    return this.state.door1_isOpen === true;
   }
   door2_isOpen() {
-    return this.state.sensors.Door2_isOpen === true;
+    return this.state.door2_isOpen === true;
   }
 
   render() {
