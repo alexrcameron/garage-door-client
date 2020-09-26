@@ -14,13 +14,12 @@ function App() {
 class GarageDoorController extends React.Component {
   constructor(props) {
     super(props);
-    
+
     // poll /update every 10 seconds
     setInterval(()=> this.getUpdate(), 10000);
   }
   getUpdate() {
     fetch('/update')
-      .then(result => result.json())
       .then(result => {
         this.state.sensors = result;
         console.log(this.state.sensors);
