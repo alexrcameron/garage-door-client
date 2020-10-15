@@ -1,6 +1,8 @@
 import React from 'react';
+import DoorControl from './components/DoorControl'
 import './App.css';
 
+var UPDATE_INTERVAL_ID = null;
   
 function App() {
   
@@ -16,15 +18,24 @@ class GarageDoorController extends React.Component {
     super(props);
 
     this.state = {
-      door1_isOpen: true,
-      door2_isOpen: true
+      initialized: false,
+      door1_isOpen: null,
+      door2_isOpen: null,
+      building_temp: null,
+      fridge_temp: null,
+      freezer_temp: null,
+      lights_areOn: null
     };
     
+    if(UPDATE_INTERVAL_ID) {
+      clearInterval(UPDATE_INTERVAL_ID);
+    }
+
     // poll /update every 5 seconds
-    setInterval(()=> this.getUpdate(), 5000);
+    UPDATE_INTERVAL_ID = this.updateFn = setInterval(()=> this.getUpdate(), 5000);
   }
   getUpdate() {
-    fetch('/update')
+    fetch('http://localhost:3001/update')
       .then(response=>{
         console.debug(response);
         return response.json();
@@ -32,8 +43,13 @@ class GarageDoorController extends React.Component {
       .then(data => {
         console.debug(data);
         this.setState({
+          initialized: true,
           door1_isOpen: data.door1_isOpen,
-          door2_isOpen: data.door2_isOpen
+          door2_isOpen: data.door2_isOpen,
+          building_temp: data.building_temp,
+          fridge_temp: data.fridge_temp,
+          freezer_temp: data.freezer_temp,
+          lights_areOn: data.lights_areOn
         });
       });
   }
@@ -48,48 +64,31 @@ class GarageDoorController extends React.Component {
   render() {
     return (
       <div className="GarageDoorController">
-        <h1>Garage Door Client</h1>
-        <DoorSection doorNumber={1} value={this.door1_isOpen()} />
-        <DoorSection doorNumber={2} value={this.door2_isOpen()} />
+        <h1>Garage Control Panel</h1>
+        <div className="status-section">
+          { this.state.initialized ? (
+              <div className="controls">
+                <DoorControl doorNumber={1} value={this.door1_isOpen()} />
+                <DoorControl doorNumber={2} value={this.door2_isOpen()} />
+                <TemperatureDisplay name="building temp" temperature={this.state.building_temp} />
+                <TemperatureDisplay name="fridge temp" temperature={this.state.fridge_temp} />
+                <TemperatureDisplay name="freezer temp" temperature={this.state.freezer_temp} />
+                <div>Lights: {this.state.lights_areOn ? "On" : "Off"}</div>
+              </div>
+            ) : (
+              <div>Getting Data...</div>
+            )
+          }
+        </div>
       </div>
     );
   }
 }
 
-class DoorSection extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
-  door_isOpen() {
-    return this.props.value === true;
-  }
-
-  render() {
-    return (
-      <div>
-        Door { this.props.doorNumber }: { this.door_isOpen() ? "Opened" : "Closed"}
-        { this.door_isOpen() ? <ApiButton label={`Close Door ${ this.props.doorNumber }`} action={`cdoor${ this.props.doorNumber }`} /> : null}
-        { !this.door_isOpen() ? <ApiButton label={`Open Door ${ this.props.doorNumber }`} action={`odoor${ this.props.doorNumber }`} /> : null}
-      </div>
-    );
-  }
-}
-
-class ApiButton extends React.Component {
-  handleClick() {
-    fetch(`/${this.props.action}`, {
-      method: 'POST'
-    }).then(
-      () => console.log(`${this.props.action} : SUCCESS`),
-      (error) => console.log(error)
-    );
-  }
-  render() {
-    return (
-      <button onClick={() => this.handleClick()}>{this.props.label}</button>
-    );
-  }
+function TemperatureDisplay(props) {
+  return (
+    <div>{props.name}: {props.temperature}&#176;F</div>
+  );
 }
 
 export default App;

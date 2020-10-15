@@ -1,1 +1,17 @@
+.GarageDoorController {
+    padding: 20px;
+}
 
+.GarageDoorController > h1 {
+    margin:0;
+}
+
+.status-section {
+    padding:10px;
+    display:inline-block;
+}
+
+.status-section > .controls > * {
+    border: solid 1px gray;
+    padding: 3px;
+}
