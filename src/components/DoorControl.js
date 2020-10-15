@@ -77,7 +77,7 @@ class DoorControl extends React.Component {
 
 class ApiButton extends React.Component {
     handleClick() {
-        fetch(`http://localhost:3001/${this.props.action}`, {
+        fetch(`/${this.props.action}`, {
         method: 'POST'
         }).then(
         () => console.log(`${this.props.action} : SUCCESS`),
