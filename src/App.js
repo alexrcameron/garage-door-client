@@ -35,7 +35,7 @@ class GarageDoorController extends React.Component {
     UPDATE_INTERVAL_ID = this.updateFn = setInterval(()=> this.getUpdate(), 5000);
   }
   getUpdate() {
-    fetch('/update')
+    fetch(`${process.env.REACT_APP_API_URL_BASE}/update`)
       .then(response=>{
         console.debug(response);
         return response.json();
